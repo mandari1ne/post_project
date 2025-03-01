@@ -14,7 +14,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Дополнительная информация', {'fields': ('icon', 'level',)}),
     )
-    inlines = [SubscriptionInline]  
+    inlines = [SubscriptionInline]
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Subscription)
