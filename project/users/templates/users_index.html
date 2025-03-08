@@ -1,15 +1,36 @@
 {% extends "base.html" %}
 
 {% block page_content %}
+<div class="container py-5" style="background-color: #87CEEB; min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm text-center" style="border-radius: 15px; background-color: #f0f8ff; color: #333; position: relative;">
+                <form action="{% url 'logout' %}" method="post" class="position-absolute" style="top: 10px; right: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">🚪 Выйти</button>
+                </form>
+                <div class="card-body">
+                    <img src="{% if user.icon %}{{ user.icon.url }}{% else %}/static/default_icon.png{% endif %}" class="img-fluid rounded-circle mb-3" style="max-width: 120px; border: 4px solid #4d6d94;">
+                    <h4 class="card-title">{{ user.username }}</h4>
+                    <p class="text-muted">{{ user.level }} уровень</p>
+                    <p>📅 Дата регистрации: {{ user.date_joined|date:"d M Y" }}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-around">
+                    <div class="text-center">
+                        <h5>📌 Подписки</h5>
+                        <p>{{ subscriptions.count }}</p>
+                    </div>
+                    <div class="text-center">
+                        <h5>👥 Подписчики</h5>
+                        <p>{{ followers.count }}</p>
+                    </div>
+                </div>
+            </div>
 
-<p>It's users index</p>
-
-<form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-primary">Logout</button>
-</form>
-
-<a href="{% url 'post_index' %}" class="btn btn-primary">All posts</a>
-
-
+            <div class="text-center">
+                <a href="{% url 'post_index' %}" class="btn btn-primary btn-lg">📜 Все посты</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
