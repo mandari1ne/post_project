@@ -1,37 +1,44 @@
-{% if form.errors %}
-    <p>Your username and password didn't match</p>
-{% endif %}
+{% extends "base.html" %}
 
-{% if next %}
-    {% if user.is_authenticated %}
-        <p>Your account doesn't have access to this page. To proceed,
-            please login with an account that has access</p>
-    {% else %}
-        <p>Please login to see this page</p>
+{% block page_content %}
+<div class="container py-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4">🔐 Вход в систему</h2>
+
+    {% if form.errors %}
+        <div class="alert alert-danger text-center">❌ Неверное имя пользователя или пароль</div>
     {% endif %}
-{% endif %}
 
-<form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
+    {% if next %}
+        {% if user.is_authenticated %}
+            <div class="alert alert-warning text-center">
+                ⚠️ Ваш аккаунт не имеет доступа к этой странице. Войдите с учетной записью, имеющей доступ.
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center">
+                🔑 Пожалуйста, войдите в систему для просмотра этой страницы.
+            </div>
+        {% endif %}
+    {% endif %}
 
-    <table>
-        <tr>
-            <td>{{ form.username.label_tag }}</td>
-            <td>{{ form.username }}</td>
-        </tr>
+    <form method="post" action="{% url 'login' %}" class="card p-4 shadow-sm">
+        {% csrf_token %}
 
-        <tr>
-            <td>{{ form.password.label_tag }}</td>
-            <td>{{ form.password }}</td>
-        </tr>
-    </table>
+        <div class="mb-3">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+        </div>
 
-    <input type="submit" value="login" />
-    <input type="hidden" name="next" value="{{ next }}" />
+        <div class="mb-3">
+            {{ form.password.label_tag }}
+            {{ form.password }}
+        </div>
 
-</form>
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit" class="btn btn-primary w-100">🔓 Войти</button>
+    </form>
 
-{# Assumes you setup the password_reset view in your URLconf #}
-<p>
-    <a href="{% url 'password_reset' %}">Lost password?</a>
-</p>
+    <p class="text-center mt-3">
+        <a href="{% url 'password_reset' %}">🔄 Забыли пароль?</a>
+    </p>
+</div>
+{% endblock %}

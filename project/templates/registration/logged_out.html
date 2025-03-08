@@ -1,2 +1,8 @@
-<p>Logged out!</p>
-<a href="{% url 'login' %}">Click here to login again.</a>
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container py-5 text-center">
+    <h2>👋 Вы вышли из системы!</h2>
+    <p><a href="{% url 'login' %}" class="btn btn-primary">🔑 Войти снова</a></p>
+</div>
+{% endblock %}

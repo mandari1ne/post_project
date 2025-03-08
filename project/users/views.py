@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import logout
+from django.shortcuts import render
 from .models import CustomUser
 
+
 # Create your views here.
+
 
 def user_index(request):
     user = request.user
