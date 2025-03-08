@@ -4,6 +4,10 @@
 <div class="container-fluid" style="background-color: #87CEEB; min-height: 100vh; padding-top: 20px; padding-bottom: 20px;">
     <div class="col-md-8 offset-md-2">
 
+        <form action="{% url 'user_index' %}" method="get" class="position-absolute" style="top: 20px; right: 20px;">
+            <button type="submit" class="btn btn-info btn-sm">👤 Профиль</button>
+        </form>
+
         <h1 class="text-center my-4 text-light">🔥 Популярные посты</h1>
         <hr style="border-color: #4d6d94;">
 
