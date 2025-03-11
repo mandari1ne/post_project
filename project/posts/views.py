@@ -11,4 +11,3 @@ def post_index(request):
         'categories': categories,
         'posts': posts,
     })
-
