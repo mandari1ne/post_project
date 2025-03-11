@@ -1,42 +1,51 @@
 {% extends 'base.html' %}
 
 {% block page_content %}
-<div class="container py-5" style="background-color: #f0f8ff; min-height: 100vh;">
+<div class="container py-5" style="background-color: #87CEEB; min-height: 100vh;">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card mb-4 shadow-sm" style="border-radius: 15px;">
-                <div class="card-body text-center">
-                    <!-- Отображение текущей аватарки -->
+            <div class="card mb-4 shadow-sm text-center" style="border-radius: 15px; background-color: #f0f8ff; color: #333; position: relative;">
+
+                <a href="{% url 'user_index' %}" class="btn btn-secondary btn-sm position-absolute" style="top: 10px; left: 10px;">🔙 Назад</a>
+
+                <div class="card-body">
                     <div class="mb-3">
-                        <img src="{% if user.icon %}{{ user.icon.url }}{% else %}/static/default_icon.png{% endif %}" class="img-fluid rounded-circle" style="max-width: 120px; border: 4px solid #4d6d94;">
+                        <img src="{% if user.icon %}
+                                        {{ user.icon.url }}
+                                  {% else %}
+                                        /static/default_icon.png
+                                  {% endif %}" class="img-fluid rounded-circle" style="max-width: 120px; border: 4px solid #4d6d94;">
                     </div>
-                    <!-- Форма редактирования профиля -->
-                    <h4>Редактировать профиль</h4>
+
+                    <h4 class="mb-4">✏️ Редактировать профиль</h4>
+
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="form-group">
-                            <label for="id_icon">Изменить аватарку</label>
+                        <div class="form-group mb-3 text-start">
+                            <label for="id_icon">🖼️ Аватарка</label>
                             {{ form.icon }}
                         </div>
-                        <div class="form-group">
-                            <label for="id_username">Имя пользователя</label>
+                        <div class="form-group mb-3 text-start">
+                            <label for="id_username">👤 Имя пользователя</label>
                             {{ form.username }}
                         </div>
-                        <div class="form-group">
-                            <label for="id_first_name">Имя</label>
+                        <div class="form-group mb-3 text-start">
+                            <label for="id_first_name">📛 Имя</label>
                             {{ form.first_name }}
                         </div>
-                        <div class="form-group">
-                            <label for="id_last_name">Фамилия</label>
+                        <div class="form-group mb-3 text-start">
+                            <label for="id_last_name">👨‍👩‍👧‍👦 Фамилия</label>
                             {{ form.last_name }}
                         </div>
-                        <div class="form-group">
-                            <label for="id_email">Электронная почта</label>
+                        <div class="form-group mb-4 text-start">
+                            <label for="id_email">📧 Электронная почта</label>
                             {{ form.email }}
                         </div>
-                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100">💾 Сохранить</button>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
