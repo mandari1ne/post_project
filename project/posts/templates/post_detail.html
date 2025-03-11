@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container-fluid" style="background-color: #87CEEB; min-height: 100vh; padding-top: 30px; padding-bottom: 30px;">
+    <div class="col-md-8 offset-md-2">
+
+        <div class="card shadow-lg" style="border-radius: 20px; background-color: #f0f8ff;">
+            <div class="card-body">
+
+                <h2 class="card-title text-dark mb-3">
+                    {% if post.user.icon %}
+                        <img src="{{ post.user.icon.url }}" alt="{{ post.user.username }}'s icon" style="width: 60px; height: 60px; border-radius: 50%; margin-right: 5px;">
+                    {% else %}
+                        <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 10px;"></i>
+                    {% endif %}
+                    {{ post.user.username }}
+                </h2>
+                <p class="text-muted mb-4">
+                    Категория: <strong>{{ post.category.name|default:"Без категории" }}</strong> |
+                    Опубликовано: {{ post.created_at|date:"d M Y H:i" }}
+                </p>
+
+                <div class="mb-4">
+                    <p class="card-text" style="color: #444; white-space: pre-wrap;">{{ post.text }}</p>
+                </div>
+
+                {% if post.images.all %}
+                <div class="mb-4">
+                    <h5>Изображения:</h5>
+                    <div class="d-flex flex-wrap gap-3 mt-2">
+                        {% for image in post.images.all %}
+                            <img src="{{ image.image.url }}" class="img-fluid rounded" style="max-width: 200px;">
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if post.file %}
+                <div class="mb-4">
+                    <h5>Файл:</h5>
+                    <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-primary">📂 Скачать файл</a>
+                </div>
+                {% endif %}
+
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                    <div>
+                        ❤️ {{ post.likes_count_annotated }} |
+                        👎 {{ post.dislikes_count_annotated }} |
+                        💬 {{ post.comments_count_annotated }}
+                    </div>
+                    <a href="{% url 'post_index' %}" class="btn btn-secondary btn-sm">← Назад к постам</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

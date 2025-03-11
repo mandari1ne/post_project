@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Post, Category
 
 def post_index(request):
@@ -16,3 +16,12 @@ def post_index(request):
         'categories': categories,
         'posts': posts,
     })
+
+def post_detail(request, pk):
+    post = get_object_or_404(
+        Post.annotate_post_data().prefetch_related('images'),
+        pk=pk
+    )
+
+    return render(request, 'post_detail.html', {'post': post})
+

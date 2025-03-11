@@ -14,8 +14,6 @@
         </form>
         {% endif %}
 
-
-
         <h1 class="text-center my-4 text-light">🔥 Популярные посты</h1>
         <hr style="border-color: #4d6d94;">
 
@@ -34,16 +32,28 @@
 
         {% if posts %}
             {% for post in posts %}
-            <div class="card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden; background-color: #f0f8ff; color: #333; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
-                <div class="card-body">
+            <div class="card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden; background-color: #f0f8ff; color: #333;">
+                <div class="card-body d-flex flex-column justify-content-between" style="min-height: 300px;">
+                    <div>
+                        <div class="post-header mb-2">
+                            <h4 class="card-title text-dark">
+                                {% if post.user.icon %}
+                                    <img src="{{ post.user.icon.url }}" alt="{{ post.user.username }}'s icon" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 5px;">
+                                {% else %}
+                                    <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 10px;"></i>
+                                {% endif %}
+                                {{ post.user.username }}
+                            </h4>
+                            <p class="text-muted">Категория: <strong>{{ post.category.name|default:"Без категории" }}</strong></p>
+                        </div>
 
-                    <div class="post-header mb-3">
-                        <h5 class="card-title text-dark">@{{ post.user.username }}</h5>
-                        <p class="text-muted">Категория: <strong>{{ post.category.name|default:"Без категории" }}</strong></p>
-                    </div>
+                        <div class="post-content mb-3">
+                            <p class="card-text" style="color: #555; max-height: 80px; overflow: hidden; text-overflow: ellipsis;">
+                                {{ post.text|truncatechars:250 }}
+                            </p>
+                        </div>
 
-                    <div class="post-content mb-3">
-                        <p class="card-text" style="color: #555;">{{ post.text|truncatewords:50 }}</p>
+                        <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-info mb-3" style="border-radius: 20px;">📖 Читать дальше</a>
                     </div>
 
                     {% if post.images.all %}
@@ -65,7 +75,9 @@
 
                     <div class="post-stats d-flex justify-content-between align-items-center mt-3">
                         <div>
-                            ❤️ {{ post.likes_count_annotated }} | 👎 {{ post.dislikes_count_annotated }} | 💬 {{ post.comments_count_annotated }}
+                            ❤️ {{ post.likes_count_annotated }} |
+                            👎 {{ post.dislikes_count_annotated }} |
+                            💬 {{ post.comments_count_annotated }}
                         </div>
                         <small class="text-muted">{{ post.created_at|date:"d M Y H:i" }}</small>
                     </div>
