@@ -20,11 +20,11 @@
         <hr style="border-color: #4d6d94;">
 
         <div class="text-center mb-4">
-            <form method="get">
+            <form method="get" class="mb-4 text-center">
                 <select class="form-select w-auto d-inline-block" name="category" onchange="this.form.submit()">
                     <option value="" {% if not request.GET.category %}selected{% endif %}>Все категории</option>
                     {% for category in categories %}
-                        <option value="{{ category.id }}" {% if category.id == request.GET.category %}selected{% endif %}>
+                        <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
                             {{ category.name }}
                         </option>
                     {% endfor %}
