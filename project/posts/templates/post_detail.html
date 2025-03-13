@@ -48,7 +48,15 @@
                         👎 {{ post.dislikes_count_annotated }} |
                         💬 {{ post.comments_count_annotated }}
                     </div>
-                    <a href="{% url 'post_index' %}" class="btn btn-secondary btn-sm">← Назад к постам</a>
+
+                    <div style="display: inline-block;">
+                        {% if user.is_authenticated and post.user == user %}
+                            <a href="{% url 'post_edit' post.id %}" class="btn btn-warning btn-sm" style="margin-right: 5px;">✏️Редактировать</a>
+                        {% endif %}
+
+                        <a href="{% url 'post_index' %}" class="btn btn-secondary btn-sm">← Назад к постам</a>
+                    </div>
+
                 </div>
 
             </div>

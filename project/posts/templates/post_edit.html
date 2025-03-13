@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container-fluid" style="background-color: #87CEEB; min-height: 100vh; padding-top: 30px; padding-bottom: 30px;">
+    <div class="col-md-8 offset-md-2">
+
+        <div class="card shadow-lg" style="border-radius: 20px; background-color: #f0f8ff;">
+            <div class="card-body">
+
+                <h2 class="card-title text-dark mb-3">Редактировать пост</h2>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-group mb-3">
+                        <label for="category">Категория</label>
+                        {{ form.category }}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="text">Текст</label>
+                        {{ form.text }}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="file">Файл</label>
+                        {{ form.file }}
+
+                        {% if post.file %}
+                            <p class="mt-2">
+                                <a href="{{ post.file.url }}" target="_blank">📂 Текущий файл</a>
+                            </p>
+                            <div class="form-check mt-1">
+                                <input class="form-check-input" type="checkbox" name="delete_file" id="delete_file">
+                                <label class="form-check-label small" for="delete_file">Удалить файл</label>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="images">Добавить изображения</label>
+                        {{ form.images }}
+                    </div>
+
+                    {% if post.images.all %}
+                        <div class="mb-3">
+                            <label>Текущие изображения:</label>
+                            <div class="d-flex flex-wrap gap-3 mt-2">
+                                {% for image in post.images.all %}
+                                <div class="position-relative">
+                                    <img src="{{ image.image.url }}" class="img-thumbnail" style="max-width: 150px;">
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" name="delete_images" value="{{ image.id }}" id="delete_image_{{ image.id }}">
+                                        <label class="form-check-label small" for="delete_image_{{ image.id }}">Удалить</label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success btn-sm">Сохранить изменения</button>
+                        <a href="{% url 'post_index' %}" class="btn btn-secondary btn-sm">← Назад к постам</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

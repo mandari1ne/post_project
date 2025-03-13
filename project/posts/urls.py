@@ -8,4 +8,5 @@ urlpatterns = [
     path('api_post_image/', api.PostImangeApiView.as_view(), name='api_post_image'),
     path('posts/', views.post_index, name='post_index'),
     path('posts/<int:pk>/', views.post_detail, name='post_detail'),
+    path('post/edit/<int:post_id>/', views.post_edit, name='post_edit'),
 ]
