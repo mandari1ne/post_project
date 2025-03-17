@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+It's subscriptions list
+
+<h2>Ваши подписки:</h2>
+<ul>
+  {% for user in subscriptions %}
+    <li>
+      <img src="{% if user.icon %}{{ user.icon.url }}{% else %}/static/default_icon.png{% endif %}" class="img-fluid rounded-circle mb-3" style="max-width: 120px; border: 4px solid #4d6d94;">
+      {{ user.username }}
+    </li>
+  {% empty %}
+    <li>У вас пока нет подписок</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

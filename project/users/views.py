@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileUpdateForm
 from .models import CustomUser
@@ -33,4 +33,19 @@ def edit_profile(request):
         form = ProfileUpdateForm(instance=request.user)
 
     return render(request, 'edit_profile.html', {'form': form})
+
+@login_required
+def user_followers(request):
+    user = request.user
+    followers = user.followers.all()
+
+    return render(request, 'followers_list.html', {'followers': followers})
+
+@login_required
+def user_subscriptions(request):
+    user = request.user
+    subscriptions = user.subscriptions.all()
+
+    return render(request, 'subscriptions_list.html', {'subscriptions': subscriptions})
+
 

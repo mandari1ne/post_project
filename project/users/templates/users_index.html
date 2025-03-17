@@ -23,15 +23,19 @@
                 </div>
 
                 <div class="card-footer d-flex justify-content-around">
-                    <div class="text-center">
-                        <h5>📌 Подписки</h5>
-                        <p>{{ subscriptions.count }}</p>
-                    </div>
+                    <a href="{% url 'subscriptions_list' %}" class="text-decoration-none text-dark">
+                        <div class="text-center">
+                            <h5>📌 Подписки</h5>
+                            <p>{{ subscriptions.count }}</p>
+                        </div>
+                    </a>
 
-                    <div class="text-center">
-                        <h5>👥 Подписчики</h5>
-                        <p>{{ followers.count }}</p>
-                    </div>
+                    <a href="{% url 'followers_list' %}" class="text-decoration-none text-dark">
+                        <div class="text-center">
+                            <h5>👥 Подписчики</h5>
+                            <p>{{ followers.count }}</p>
+                        </div>
+                    </a>
                 </div>
             </div>
 

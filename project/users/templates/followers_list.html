@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container py-5" style="background-color: #87CEEB; min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm" style="border-radius: 15px; background-color: #f0f8ff; color: #333;">
+                <div class="card-body text-center">
+                    <h3 class="mb-4">👥 Ваши подписчики</h3>
+
+                    {% if followers %}
+                        <div class="row">
+                            {% for user in followers %}
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 shadow-sm" style="border-radius: 15px;">
+                                        <div class="card-body text-center">
+                                            <img src="{% if user.icon %}{{ user.icon.url }}{% else %}/static/default_icon.png{% endif %}"
+                                                 class="img-fluid rounded-circle mb-3"
+                                                 style="max-width: 100px; border: 4px solid #4d6d94;">
+                                            <h5 class="card-title">{{ user.username }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">У вас пока нет подписчиков 😢</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'user_index' %}" class="btn btn-secondary">🔙 Назад в профиль</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
