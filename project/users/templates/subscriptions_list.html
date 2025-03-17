@@ -1,19 +1,45 @@
 {% extends "base.html" %}
 
 {% block page_content %}
+<div class="container py-5" style="background-color: #87CEEB; min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm" style="border-radius: 15px; background-color: #f0f8ff; color: #333;">
+                <div class="card-body text-center">
+                    <h3 class="mb-4">📌 Ваши подписки</h3>
 
-It's subscriptions list
+                    {% if subscriptions %}
+                        <div class="row">
+                            {% for user in subscriptions %}
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 shadow-sm" style="border-radius: 15px;">
+                                        <div class="card-body text-center">
+                                            <img src="{% if user.icon %}{{ user.icon.url }}{% else %}/static/default_icon.png{% endif %}"
+                                                 class="img-fluid rounded-circle mb-3"
+                                                 style="max-width: 100px; border: 4px solid #4d6d94;">
+                                            <h5 class="card-title">{{ user.username }}</h5>
 
-<h2>Ваши подписки:</h2>
-<ul>
-  {% for user in subscriptions %}
-    <li>
-      <img src="{% if user.icon %}{{ user.icon.url }}{% else %}/static/default_icon.png{% endif %}" class="img-fluid rounded-circle mb-3" style="max-width: 120px; border: 4px solid #4d6d94;">
-      {{ user.username }}
-    </li>
-  {% empty %}
-    <li>У вас пока нет подписок</li>
-  {% endfor %}
-</ul>
+                                            {% if user != request.user %}
+                                                <form action="{% url 'unfollow_user' user.id %}" method="post" class="mt-2">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm">🚫 Отписаться</button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">У вас пока нет подписок 😢</p>
+                    {% endif %}
+                </div>
+            </div>
 
+            <div class="text-center mt-4">
+                <a href="{% url 'user_index' %}" class="btn btn-secondary">🔙 Назад в профиль</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
