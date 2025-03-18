@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Category, PostImage
 from .forms import PostEditForm
+from users import models
 
 
 def post_index(request):
@@ -20,13 +22,26 @@ def post_index(request):
     })
 
 
+# def post_detail(request, pk):
+#     post = get_object_or_404(
+#         Post.annotate_post_data().prefetch_related('images'),
+#         pk=pk
+#     )
+#
+#     return render(request, 'post_detail.html', {'post': post})
+
 def post_detail(request, pk):
     post = get_object_or_404(
         Post.annotate_post_data().prefetch_related('images'),
         pk=pk
     )
 
-    return render(request, 'post_detail.html', {'post': post})
+    # referer = request.META.get('HTTP_REFERER')
+
+    return render(request, 'post_detail.html', {
+        'post': post,
+        # 'referer': referer,  # передаём его в шаблон
+    })
 
 
 def post_edit(request, post_id):
@@ -62,3 +77,24 @@ def post_edit(request, post_id):
     form.fields['images'].widget.attrs['queryset'] = post.images.all()
 
     return render(request, 'post_edit.html', {'form': form, 'post': post})
+
+
+def view_user_posts(request, user_id):
+    target_user = get_object_or_404(models.CustomUser, id=user_id)
+
+    categories = Category.objects.all()
+    category_id = request.GET.get('category')
+
+    posts = Post.annotate_post_data().filter(user=target_user).prefetch_related('images')
+
+    if category_id:
+        posts = posts.filter(category_id=category_id)
+
+    posts = posts.order_by('-created_at')
+
+    return render(request, 'user_posts.html', {
+        'target_user': target_user,
+        'categories': categories,
+        'posts': posts,
+        'selected_category': category_id,
+    })

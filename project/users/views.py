@@ -96,20 +96,28 @@ def unfollow_user(request, user_id):
     return redirect('followers_list')
 
 
-@login_required
 def view_user_profile(request, user_id):
     target_user = get_object_or_404(CustomUser, id=user_id)
 
     followers = target_user.followers.all()
     subscriptions = target_user.subscriptions.all()
 
-    is_following = target_user in request.user.subscriptions.all()
+    is_following = False
+    if request.user.is_authenticated:
+        is_following = target_user in request.user.subscriptions.all()
+
+    referer = request.META.get('HTTP_REFERER', '/users/')
+
+    # if '/posts/' in referer:
+    #     return redirect('post_index')
+
 
     context = {
         'target_user': target_user,
         'followers': followers,
         'subscriptions': subscriptions,
-        'is_following': is_following
+        'is_following': is_following,
+        'referer': referer,
     }
 
     return render(request, 'user_profile.html', context)

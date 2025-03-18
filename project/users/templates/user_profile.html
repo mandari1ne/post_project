@@ -14,7 +14,7 @@
                     <p class="text-muted">{{ target_user.level }} уровень</p>
                     <p>📅 Дата регистрации: {{ target_user.date_joined|date:"d M Y" }}</p>
 
-                    {% if target_user != request.user %}
+                    {% if request.user.is_authenticated and target_user != request.user %}
                         <form method="post" action="{% if is_following %}{% url 'unfollow_user' target_user.id %}{% else %}{% url 'follow_user' target_user.id %}{% endif %}">
                             {% csrf_token %}
                             <button type="submit" class="btn {% if is_following %}btn-outline-danger{% else %}btn-outline-primary{% endif %} mt-3">
@@ -22,6 +22,7 @@
                             </button>
                         </form>
                     {% endif %}
+
                 </div>
 
                 <div class="card-footer d-flex justify-content-around">
@@ -37,7 +38,11 @@
             </div>
 
             <div class="text-center">
-                <a href="{% url 'user_index' %}" class="btn btn-secondary">🔙 Назад</a>
+                <a href="{% url 'user_posts' target_user.id %}" class="btn btn-primary mb-3">📜 Посты пользователя</a>
+            </div>
+
+            <div class="text-center">
+                <a href="{{ referer }}" class="btn btn-secondary">🔙 Назад</a>
             </div>
         </div>
     </div>
