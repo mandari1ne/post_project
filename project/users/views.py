@@ -68,6 +68,8 @@ def follow_user(request, user_id):
         return redirect('subscriptions_list')
     elif '/users/followers' in referer_url:
         return redirect('followers_list')
+    elif f'/users/profile/{user_id}/' in referer_url:
+        return redirect('user_profile', user_id=target_user.id)
 
     return redirect('followers_list')
 
@@ -88,5 +90,26 @@ def unfollow_user(request, user_id):
         return redirect('subscriptions_list')
     elif '/users/followers' in referer_url:
         return redirect('followers_list')
+    elif f'/users/profile/{user_id}/' in referer_url:
+        return redirect('user_profile', user_id=target_user.id)
 
     return redirect('followers_list')
+
+
+@login_required
+def view_user_profile(request, user_id):
+    target_user = get_object_or_404(CustomUser, id=user_id)
+
+    followers = target_user.followers.all()
+    subscriptions = target_user.subscriptions.all()
+
+    is_following = target_user in request.user.subscriptions.all()
+
+    context = {
+        'target_user': target_user,
+        'followers': followers,
+        'subscriptions': subscriptions,
+        'is_following': is_following
+    }
+
+    return render(request, 'user_profile.html', context)

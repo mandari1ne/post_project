@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container py-5" style="background-color: #87CEEB; min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm text-center" style="border-radius: 15px; background-color: #f0f8ff; color: #333;">
+
+                <div class="card-body">
+                    <img src="{% if target_user.icon %}{{ target_user.icon.url }}{% else %}/static/default_icon.png{% endif %}"
+                         class="img-fluid rounded-circle mb-3"
+                         style="max-width: 120px; border: 4px solid #4d6d94;">
+                    <h4 class="card-title">{{ target_user.username }}</h4>
+                    <p class="text-muted">{{ target_user.level }} уровень</p>
+                    <p>📅 Дата регистрации: {{ target_user.date_joined|date:"d M Y" }}</p>
+
+                    {% if target_user != request.user %}
+                        <form method="post" action="{% if is_following %}{% url 'unfollow_user' target_user.id %}{% else %}{% url 'follow_user' target_user.id %}{% endif %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn {% if is_following %}btn-outline-danger{% else %}btn-outline-primary{% endif %} mt-3">
+                                {% if is_following %}🚫 Отписаться{% else %}➕ Подписаться{% endif %}
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+
+                <div class="card-footer d-flex justify-content-around">
+                    <div class="text-center">
+                        <h5>📌 Подписки</h5>
+                        <p>{{ subscriptions.count }}</p>
+                    </div>
+                    <div class="text-center">
+                        <h5>👥 Подписчики</h5>
+                        <p>{{ followers.count }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="{% url 'user_index' %}" class="btn btn-secondary">🔙 Назад</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
