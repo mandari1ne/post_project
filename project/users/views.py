@@ -108,10 +108,6 @@ def view_user_profile(request, user_id):
 
     referer = request.META.get('HTTP_REFERER', '/users/')
 
-    # if '/posts/' in referer:
-    #     return redirect('post_index')
-
-
     context = {
         'target_user': target_user,
         'followers': followers,

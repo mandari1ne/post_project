@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Category, PostImage
 from .forms import PostEditForm
 from users import models
+from reactions.models import Reaction
 
 
 def post_index(request):
@@ -16,19 +17,38 @@ def post_index(request):
 
     posts = posts.order_by('-created_at')
 
+    # Получим реакции текущего пользователя (если он вошёл)
+    user_reactions = {}
+    if request.user.is_authenticated:
+        reactions = Reaction.objects.filter(user=request.user, post__in=posts)
+        user_reactions = {reaction.post_id: reaction.reaction_type for reaction in reactions}
+
+    # Добавим реакцию к каждому посту
+    for post in posts:
+        post.user_reaction = user_reactions.get(post.id)
+
     return render(request, 'posts_index.html', {
         'categories': categories,
         'posts': posts,
     })
 
 
-# def post_detail(request, pk):
-#     post = get_object_or_404(
-#         Post.annotate_post_data().prefetch_related('images'),
-#         pk=pk
-#     )
+# def post_index(request):
+#     categories = Category.objects.all()
+#     category_id = request.GET.get('category')
 #
-#     return render(request, 'post_detail.html', {'post': post})
+#     posts = Post.annotate_post_data().prefetch_related('images')
+#
+#     if category_id:
+#         posts = posts.filter(category_id=category_id)
+#
+#     posts = posts.order_by('-created_at')
+#
+#     return render(request, 'posts_index.html', {
+#         'categories': categories,
+#         'posts': posts,
+#     })
+
 
 def post_detail(request, pk):
     post = get_object_or_404(
@@ -36,11 +56,8 @@ def post_detail(request, pk):
         pk=pk
     )
 
-    # referer = request.META.get('HTTP_REFERER')
-
     return render(request, 'post_detail.html', {
         'post': post,
-        # 'referer': referer,  # передаём его в шаблон
     })
 
 

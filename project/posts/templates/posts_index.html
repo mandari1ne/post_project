@@ -5,13 +5,13 @@
     <div class="col-md-8 offset-md-2">
 
         {% if user.is_authenticated %}
-         <form action="{% url 'user_index' %}" method="get" class="position-absolute" style="top: 20px; right: 20px;">
-            <button type="submit" class="btn btn-info btn-sm">👤 Профиль</button>
-        </form>
-       {% else %}
-        <form action="{% url 'login' %}" class="position-absolute" style="top: 20px; right: 20px;">
-            <button type="submit" class="btn btn-primary">🔑 Войти</button>
-        </form>
+            <form action="{% url 'user_index' %}" method="get" class="position-absolute" style="top: 20px; right: 20px;">
+                <button type="submit" class="btn btn-info btn-sm">👤 Профиль</button>
+            </form>
+        {% else %}
+            <form action="{% url 'login' %}" class="position-absolute" style="top: 20px; right: 20px;">
+                <button type="submit" class="btn btn-primary">🔑 Войти</button>
+            </form>
         {% endif %}
 
         <h1 class="text-center my-4 text-light">🔥 Популярные посты</h1>
@@ -46,7 +46,6 @@
                                     <span>{{ post.user.username }}</span>
                                 </a>
                             </h4>
-
                             <p class="text-muted">Категория: <strong>{{ post.category.name|default:"Без категории" }}</strong></p>
                         </div>
 
@@ -77,10 +76,27 @@
                     {% endif %}
 
                     <div class="post-stats d-flex justify-content-between align-items-center mt-3">
-                        <div>
-                            ❤️ {{ post.likes_count_annotated }} |
-                            👎 {{ post.dislikes_count_annotated }} |
-                            💬 {{ post.comments_count_annotated }}
+                        <div class="d-flex align-items-center gap-3">
+                            {% if user.is_authenticated %}
+                                <form method="post" action="{% url 'react_to_post' post.id 'like' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="btn btn-sm d-flex align-items-center {% if post.user_reaction == 'like' %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                                        ❤️ <span class="ms-1">{{ post.likes_count_annotated }}</span>
+                                    </button>
+                                </form>
+
+                                <form method="post" action="{% url 'react_to_post' post.id 'dislike' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="btn btn-sm d-flex align-items-center {% if post.user_reaction == 'dislike' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">
+                                        👎 <span class="ms-1">{{ post.dislikes_count_annotated }}</span>
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span>❤️ {{ post.likes_count_annotated }} | 👎 {{ post.dislikes_count_annotated }}</span>
+                            {% endif %}
+                            <span class="text-muted">💬 {{ post.comments_count_annotated }}</span>
                         </div>
                         <small class="text-muted">{{ post.created_at|date:"d M Y H:i" }}</small>
                     </div>
