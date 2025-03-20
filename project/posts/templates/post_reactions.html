@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<div class="container-fluid" style="background-color: #87CEEB; min-height: 100vh; padding-top: 20px; padding-bottom: 20px;">
+    <div class="col-md-8 offset-md-2">
+        <h2 class="text-center text-light mb-4">👀 Реакции на пост №{{ post.id }}</h2>
+        <div class="card shadow-sm mb-4" style="border-radius: 15px; overflow: hidden; background-color: #f0f8ff;">
+            <div class="card-body">
+                <p class="text-muted">"{{ post.text|truncatechars:100 }}"</p>
+
+                <hr>
+
+                <h4>❤️ Лайки ({{ likes.count }})</h4>
+                {% if likes %}
+                    <ul class="list-unstyled">
+                        {% for reaction in likes %}
+                            <li class="d-flex align-items-center mb-2">
+                                {% if reaction.user.icon %}
+                                    <img src="{{ reaction.user.icon.url }}" alt="{{ reaction.user.username }}'s icon" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                                {% else %}
+                                    <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 10px;"></i>
+                                {% endif %}
+                                <span>{{ reaction.user.username }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">Пока никто не поставил лайк.</p>
+                {% endif %}
+
+                <h4 class="mt-4">👎 Дизлайки ({{ dislikes.count }})</h4>
+                {% if dislikes %}
+                    <ul class="list-unstyled">
+                        {% for reaction in dislikes %}
+                            <li class="d-flex align-items-center mb-2">
+                                {% if reaction.user.icon %}
+                                    <img src="{{ reaction.user.icon.url }}" alt="{{ reaction.user.username }}'s icon" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                                {% else %}
+                                    <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 10px;"></i>
+                                {% endif %}
+                                <span>{{ reaction.user.username }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">Пока никто не поставил дизлайк.</p>
+                {% endif %}
+
+                <div class="text-center mt-4">
+                    <a href="{% url 'post_index' %}" class="btn btn-info">⬅ Назад к постам</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -56,6 +56,12 @@
                         </div>
 
                         <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-info mb-3" style="border-radius: 20px;">📖 Читать дальше</a>
+
+                        {% if post.user == user %}
+                            <a href="{% url 'post_reactions' post.id %}" class="btn btn-sm btn-outline-secondary mb-3">
+                                👀 Посмотреть, кто отреагировал
+                            </a>
+                        {% endif %}
                     </div>
 
                     {% if post.images.all %}
