@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Count, Case, When, IntegerField
+from django.db.models import Count, Case, When, IntegerField, Q
 
 
 # Create your models here.
@@ -40,16 +40,11 @@ class Post(models.Model):
     @classmethod
     def annotate_post_data(cls):
         return cls.objects.annotate(
-            comments_count_annotated=Count('comments'),
-            reactions_count_annotated=Count('reactions'),
-            likes_count_annotated=Count(
-                Case(When(reactions__reaction_type='like', then=1), output_field=IntegerField())
-            ),
-            dislikes_count_annotated=Count(
-                Case(When(reactions__reaction_type='dislike', then=1), output_field=IntegerField())
-            )
+            comments_count_annotated=Count('comments', distinct=True),
+            likes_count_annotated=Count('reactions', filter=Q(reactions__reaction_type='like'), distinct=True),
+            dislikes_count_annotated=Count('reactions', filter=Q(reactions__reaction_type='dislike'), distinct=True),
+            reactions_count_annotated=Count('reactions', distinct=True),
         )
-
 
 
 class PostImage(models.Model):

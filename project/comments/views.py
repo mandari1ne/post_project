@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from posts import models
 from .forms import CommentForm
+from .models import Comment
 
 
 # Create your views here.
@@ -36,3 +38,14 @@ def post_comments(request, post_id):
         'form': form,
         'back': back,
     })
+
+
+@login_required
+def comments_delete(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    post = comment.post
+
+    if request.method == 'POST':
+        comment.delete()
+
+    return redirect('post_comments', post_id=post.id)
