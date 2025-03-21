@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_POST
+
 from .models import Post, Category, PostImage
 from .forms import PostEditForm
 from users import models
@@ -46,7 +48,6 @@ def post_detail(request, pk):
     return render(request, 'post_detail.html', {
         'post': post,
     })
-
 
 
 def post_edit(request, post_id):
@@ -103,3 +104,15 @@ def view_user_posts(request, user_id):
         'posts': posts,
         'selected_category': category_id,
     })
+
+
+@login_required
+def post_delete(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.method == 'POST':
+        post.delete()
+
+        return redirect('post_index')
+
+    return render(request, 'post_confirm_delete.html', {'post': post})

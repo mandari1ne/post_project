@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block page_content %}
+<div class="container mt-5">
+    <div class="alert alert-warning shadow-lg p-4 rounded">
+        <h4 class="mb-3">Вы уверены, что хотите удалить этот пост?</h4>
+        
+        <p><strong>{{ post.text|truncatechars:100 }}</strong></p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">🗑️ Удалить</button>
+            <a href="{% url 'post_detail' post.id %}" class="btn btn-secondary">🚫 Отмена</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

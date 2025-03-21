@@ -80,6 +80,10 @@
                     <div style="display: inline-block;">
                         {% if user.is_authenticated and post.user == user %}
                             <a href="{% url 'post_edit' post.id %}" class="btn btn-warning btn-sm" style="margin-right: 5px;">✏️Редактировать</a>
+
+                            <form action="{% url 'post_delete' post.id %}" method="get" style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">🗑️Удалить</button>
+                            </form>
                         {% endif %}
 
 
