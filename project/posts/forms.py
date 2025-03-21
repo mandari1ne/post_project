@@ -3,7 +3,7 @@ from .models import Post, Category, PostImage
 from django.forms import FileInput
 
 
-class PostEditForm(forms.ModelForm):
+class PostForm(forms.ModelForm):
     images = forms.FileField(
         required=False,
         widget=forms.ClearableFileInput(attrs={'multiple': True, 'class': 'form-control'})

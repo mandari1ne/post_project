@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
 from .models import Post, Category, PostImage
-from .forms import PostEditForm
+from .forms import PostForm
 from users import models
 from reactions.models import Reaction
 
@@ -54,7 +54,7 @@ def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
     if request.method == 'POST':
-        form = PostEditForm(request.POST, request.FILES, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
 
         if form.is_valid():
             if request.POST.get('delete_file') and post.file:
@@ -78,7 +78,7 @@ def post_edit(request, post_id):
             return redirect('post_index')
 
     else:
-        form = PostEditForm(instance=post)
+        form = PostForm(instance=post)
 
     form.fields['images'].widget.attrs['queryset'] = post.images.all()
 
@@ -116,3 +116,24 @@ def post_delete(request, post_id):
         return redirect('post_index')
 
     return render(request, 'post_confirm_delete.html', {'post': post})
+
+
+@login_required
+def post_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+
+            images = request.FILES.getlist('images')
+            for image in images:
+                PostImage.objects.create(post=post, image=image)
+
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm()
+
+    return render(request, 'post_create.html', {'form': form})
