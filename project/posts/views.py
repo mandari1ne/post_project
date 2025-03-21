@@ -32,14 +32,21 @@ def post_index(request):
 
 
 def post_detail(request, pk):
-    post = get_object_or_404(
-        Post.annotate_post_data().prefetch_related('images'),
-        pk=pk
-    )
+    post_qs = Post.annotate_post_data().prefetch_related('images')
+    post = get_object_or_404(post_qs, pk=pk)
+
+    user_reaction = None
+    if request.user.is_authenticated:
+        reaction = Reaction.objects.filter(user=request.user, post=post).first()
+        if reaction:
+            user_reaction = reaction.reaction_type
+
+    post.user_reaction = user_reaction
 
     return render(request, 'post_detail.html', {
         'post': post,
     })
+
 
 
 def post_edit(request, post_id):
