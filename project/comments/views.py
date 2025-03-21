@@ -1,3 +1,38 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from posts import models
+from .forms import CommentForm
+
 
 # Create your views here.
+
+
+def post_comments(request, post_id):
+    post = get_object_or_404(models.Post, id=post_id)
+    comments = post.comments.select_related('user').order_by('-created_at')
+    form = CommentForm()
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+            return redirect('post_comments', post_id=post_id)
+
+    referer_url = request.META.get('HTTP_REFERER', '')
+
+    if f'/posts/{post_id}' in referer_url:
+        back = reverse('post_detail', args=[post_id])
+    elif '/posts' in referer_url:
+        back = reverse('post_index')
+    else:
+        back = reverse('post_index')
+
+    return render(request, 'post_comments.html', {
+        'post': post,
+        'comments': comments,
+        'form': form,
+        'back': back,
+    })

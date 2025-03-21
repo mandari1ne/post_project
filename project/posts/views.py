@@ -1,7 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.decorators.http import require_POST
-
 from .models import Post, Category, PostImage
 from .forms import PostForm
 from users import models

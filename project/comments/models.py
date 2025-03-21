@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count, Case, When, IntegerField
 
 # Create your models here.
 
@@ -28,6 +29,10 @@ class Comment(models.Model):
     def annotate_comment_data(cls):
         return cls.objects.annotate(
             reactions_count=Count('reactions'),
-            likes_count=Count(Case(When(reactions__reaction_type='like', then=1), output_field=IntegerField())),
-            dislikes_count=Count(Case(When(reactions__reaction_type='dislike', then=1), output_field=IntegerField()))
+            likes_count=Count(
+                Case(When(reactions__reaction_type='like', then=1), output_field=IntegerField())
+            ),
+            dislikes_count=Count(
+                Case(When(reactions__reaction_type='dislike', then=1), output_field=IntegerField())
+            )
         )

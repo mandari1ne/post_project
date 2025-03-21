@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container-fluid" style="background-color: #87CEEB; min-height: 100vh; padding-top: 30px; padding-bottom: 30px;">
+    <div class="col-md-8 offset-md-2">
+
+        <div class="card shadow-lg" style="border-radius: 20px; background-color: #f0f8ff;">
+            <div class="card-body">
+                <h2 class="card-title text-dark mb-3">Комментарии к посту:</h2>
+
+                {% if comments.exists %}
+                    <div class="list-group mb-4">
+                        {% for comment in comments %}
+                            <div class="list-group-item">
+                                <strong>{{ comment.user.username }}:</strong>
+                                <p>{{ comment.text }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        Комментарии отсутствуют
+                    </div>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    <h4 class="text-dark">Добавить комментарий:</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary btn-sm">💬 Отправить</button>
+                    </form>
+                {% endif %}
+
+                <div class="mt-4">
+                    <a href="{{ back }}" class="btn btn-secondary btn-sm">📜 Назад</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

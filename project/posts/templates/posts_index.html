@@ -102,7 +102,9 @@
                             {% else %}
                                 <span>❤️ {{ post.likes_count_annotated }} | 👎 {{ post.dislikes_count_annotated }}</span>
                             {% endif %}
-                            <span class="text-muted">💬 {{ post.comments_count_annotated }}</span>
+                            <a href="{% url 'post_comments' post.id %}" class="btn btn-sm d-flex align-items-center {% if post.comments_count_annotated > 0 %}btn-outline-primary{% else %}btn-primary{% endif %}">
+                                💬 <span class="ms-1">{{ post.comments_count_annotated }}</span>
+                            </a>
                         </div>
                         <small class="text-muted">{{ post.created_at|date:"d M Y H:i" }}</small>
                     </div>
