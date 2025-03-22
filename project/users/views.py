@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileUpdateForm
+from django.contrib.auth import login
+from .forms import ProfileUpdateForm, CustomUserCreationForm
 from .models import CustomUser, Subscription
 
 
@@ -117,3 +118,17 @@ def view_user_profile(request, user_id):
     }
 
     return render(request, 'user_profile.html', context)
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+
+            return redirect('user_index')
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'registration/register.html', {'form': form})
