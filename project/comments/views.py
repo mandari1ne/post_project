@@ -22,8 +22,16 @@ def post_comments(request, post_id):
 
     form = CommentForm()
 
+    if request.user.is_authenticated:
+        for comment in comments:
+            comment.user_reaction = comment.reactions.filter(user=request.user).first()
+
+            for reply in comment.replies.all():
+                reply.user_reaction = reply.reactions.filter(user=request.user).first()
+
     if request.method == 'POST':
         form = CommentForm(request.POST)
+
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
@@ -36,6 +44,7 @@ def post_comments(request, post_id):
                     comment.parent = parent_comment
 
             comment.save()
+
             return redirect('post_comments', post_id=post_id)
 
     referer_url = request.META.get('HTTP_REFERER', '')

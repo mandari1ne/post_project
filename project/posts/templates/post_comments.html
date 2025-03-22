@@ -21,35 +21,82 @@
                                         <strong>{{ comment.user.username }}</strong>
                                         <p>{{ comment.text }}</p>
 
+                                        <div class="post-reactions d-flex gap-3 mt-2">
+                                            {% if user.is_authenticated %}
+                                                <form method="post" action="{% url 'react_to_comment' comment.id 'like' %}" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit"
+                                                            class="btn btn-sm d-flex align-items-center {% if comment.user_reaction and comment.user_reaction.reaction_type == 'like' %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                                                        ❤️ <span class="ms-1">{{ comment.likes_count }}</span>
+                                                    </button>
+                                                </form>
+
+                                                <form method="post" action="{% url 'react_to_comment' comment.id 'dislike' %}" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit"
+                                                            class="btn btn-sm d-flex align-items-center {% if comment.user_reaction and comment.user_reaction.reaction_type == 'dislike' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">
+                                                        👎 <span class="ms-1">{{ comment.dislikes_count }}</span>
+                                                    </button>
+                                                </form>
+                                            {% else %}
+                                                <span>❤️ {{ comment.likes_count }} | 👎 {{ comment.dislikes_count }}</span>
+                                            {% endif %}
+                                        </div>
+
                                         {% if request.user == comment.user or request.user == post.user %}
                                             <form method="post" action="{% url 'delete_comment' comment.id %}">
                                                 {% csrf_token %}
-                                                <button type="submit" class="btn btn-danger btn-sm">🗑 Удалить</button>
+                                                <button type="submit" class="btn btn-danger btn-sm mt-2">🗑 Удалить</button>
                                             </form>
                                         {% endif %}
 
                                         {% for reply in comment.replies.all %}
-                                            <div class="mt-3 ms-4 p-2 rounded bg-light d-flex align-items-start">
-                                                {% if reply.user.icon %}
-                                                    <img src="{{ reply.user.icon.url }}" alt="{{ reply.user.username }}'s icon" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
-                                                {% else %}
-                                                    <i class="fas fa-user-circle" style="font-size: 1.5rem; margin-right: 10px;"></i>
-                                                {% endif %}
-                                                <div>
-                                                    <strong>{{ reply.user.username }}</strong>
-                                                    <p>{{ reply.text }}</p>
-
-                                                    {% if request.user == reply.user or request.user == post.user %}
-                                                        <form method="post" action="{% url 'delete_comment' reply.id %}" >
-                                                            {% csrf_token %}
-                                                            <button type="submit" class="btn btn-danger btn-sm">🗑 Удалить</button>
-                                                        </form>
+                                            <div class="mt-3 ms-4 p-2 rounded bg-light">
+                                                <div class="d-flex align-items-start">
+                                                    {% if reply.user.icon %}
+                                                        <img src="{{ reply.user.icon.url }}" alt="{{ reply.user.username }}'s icon" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                                                    {% else %}
+                                                        <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 10px;"></i>
                                                     {% endif %}
+                                                    <div>
+                                                        <strong>{{ reply.user.username }}</strong>
+                                                        <p>{{ reply.text }}</p>
+
+                                                        <div class="post-reactions d-flex gap-3 mt-2">
+                                                            {% if user.is_authenticated %}
+                                                                <form method="post" action="{% url 'react_to_comment' reply.id 'like' %}" class="d-inline">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit"
+                                                                            class="btn btn-sm d-flex align-items-center {% if reply.user_reaction and reply.user_reaction.reaction_type == 'like' %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                                                                        ❤️ <span class="ms-1">{{ reply.likes_count }}</span>
+                                                                    </button>
+                                                                </form>
+
+                                                                <form method="post" action="{% url 'react_to_comment' reply.id 'dislike' %}" class="d-inline">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit"
+                                                                            class="btn btn-sm d-flex align-items-center {% if reply.user_reaction and reply.user_reaction.reaction_type == 'dislike' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">
+                                                                        👎 <span class="ms-1">{{ reply.dislikes_count }}</span>
+                                                                    </button>
+                                                                </form>
+                                                            {% else %}
+                                                                <span>❤️ {{ reply.likes_count }} | 👎 {{ reply.dislikes_count }}</span>
+                                                            {% endif %}
+                                                        </div>
+
+                                                        {% if request.user == reply.user or request.user == post.user %}
+                                                            <form method="post" action="{% url 'delete_comment' reply.id %}">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-danger btn-sm mt-2">🗑 Удалить</button>
+                                                            </form>
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
                                         {% endfor %}
 
-                                        {% if user.is_authenticated %}
+
+                                         {% if user.is_authenticated %}
                                             <form method="post" class="mt-2">
                                                 {% csrf_token %}
                                                 {{ form.as_p }}
