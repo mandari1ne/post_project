@@ -11,7 +11,15 @@ from .models import Comment
 
 def post_comments(request, post_id):
     post = get_object_or_404(models.Post, id=post_id)
-    comments = post.comments.select_related('user').order_by('-created_at')
+
+    comments = (
+        post.comments
+        .select_related('user')
+        .prefetch_related('replies__user')
+        .filter(parent__isnull=True)
+        .order_by('-created_at')
+    )
+
     form = CommentForm()
 
     if request.method == 'POST':
@@ -20,6 +28,13 @@ def post_comments(request, post_id):
             comment = form.save(commit=False)
             comment.post = post
             comment.user = request.user
+
+            parent_id = request.POST.get('parent_id')
+            if parent_id:
+                parent_comment = Comment.objects.filter(id=parent_id, post=post).first()
+                if parent_comment:
+                    comment.parent = parent_comment
+
             comment.save()
             return redirect('post_comments', post_id=post_id)
 
