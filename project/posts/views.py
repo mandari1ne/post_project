@@ -111,6 +111,13 @@ def post_delete(request, post_id):
     if request.method == 'POST':
         post.delete()
 
+        posts_count = Post.objects.filter(user=request.user).count()
+
+        new_level = (posts_count - 1) // 10 + 1
+
+        request.user.level = new_level
+        request.user.save()
+
         return redirect('post_index')
 
     return render(request, 'post_confirm_delete.html', {'post': post})
@@ -129,6 +136,13 @@ def post_create(request):
             images = request.FILES.getlist('images')
             for image in images:
                 PostImage.objects.create(post=post, image=image)
+
+            posts_count = Post.objects.filter(user=request.user).count()
+
+            new_level = (posts_count - 1) // 10 + 1
+
+            request.user.level = new_level
+            request.user.save()
 
             return redirect('post_detail', pk=post.pk)
     else:
