@@ -12,14 +12,18 @@
                         {% for comment in comments %}
                             <div class="list-group-item">
                                 <div class="d-flex align-items-start">
-                                    {% if comment.user.icon %}
-                                        <img src="{{ comment.user.icon.url }}" alt="{{ comment.user.username }}'s icon" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-                                    {% else %}
-                                        <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 10px;"></i>
-                                    {% endif %}
+                                    <a href="{% url 'user_profile' comment.user.id %}" class="d-flex align-items-center text-decoration-none">
+                                        {% if comment.user.icon %}
+                                            <img src="{{ comment.user.icon.url }}" alt="{{ comment.user.username }}'s icon" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                                        {% else %}
+                                            <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 10px;"></i>
+                                        {% endif %}
+                                    </a>
                                     <div>
-                                        <strong>{{ comment.user.username }}</strong>
-                                        <p>{{ comment.text }}</p>
+                                        <a href="{% url 'user_profile' comment.user.id %}" class="text-decoration-none text-dark">
+                                            <strong>{{ comment.user.username }}</strong>
+                                        </a>
+                                        <p style="margin-top: 5px;">{{ comment.text }}</p>
 
                                         <div class="post-reactions d-flex gap-3 mt-2">
                                             {% if user.is_authenticated %}
@@ -53,14 +57,18 @@
                                         {% for reply in comment.replies.all %}
                                             <div class="mt-3 ms-4 p-2 rounded bg-light">
                                                 <div class="d-flex align-items-start">
-                                                    {% if reply.user.icon %}
-                                                        <img src="{{ reply.user.icon.url }}" alt="{{ reply.user.username }}'s icon" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-                                                    {% else %}
-                                                        <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 10px;"></i>
-                                                    {% endif %}
+                                                    <a href="{% url 'user_profile' reply.user.id %}" class="d-flex align-items-center text-decoration-none">
+                                                        {% if reply.user.icon %}
+                                                            <img src="{{ reply.user.icon.url }}" alt="{{ reply.user.username }}'s icon" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                                                        {% else %}
+                                                            <i class="fas fa-user-circle" style="font-size: 2rem; margin-right: 10px;"></i>
+                                                        {% endif %}
+                                                    </a>
                                                     <div>
-                                                        <strong>{{ reply.user.username }}</strong>
-                                                        <p>{{ reply.text }}</p>
+                                                        <a href="{% url 'user_profile' reply.user.id %}" class="text-decoration-none text-dark">
+                                                            <strong>{{ reply.user.username }}</strong>
+                                                        </a>
+                                                        <p style="margin-top: 5px;">{{ reply.text }}</p>
 
                                                         <div class="post-reactions d-flex gap-3 mt-2">
                                                             {% if user.is_authenticated %}
@@ -126,8 +134,7 @@
 
                 <div class="mt-4">
                     <a href="{{ back }}" class="btn btn-secondary btn-sm">📜 Назад</a>
-                </div>
-            </div>
+                </div></div>
         </div>
     </div>
 </div>
