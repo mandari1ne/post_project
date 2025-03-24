@@ -70,12 +70,13 @@
                                         👎 <span class="ms-1">{{ post.dislikes_count_annotated }}</span>
                                     </button>
                                 </form>
+
+                                <a href="{% url 'post_comments' post.id %}" class="btn btn-sm d-flex align-items-center {% if post.comments_count_annotated > 0 %}btn-outline-primary{% else %}btn-primary{% endif %}">
+                                    💬 <span class="ms-1">{{ post.comments_count_annotated }}</span>
+                                </a>
                             {% else %}
-                                <span>❤️ {{ post.likes_count_annotated }} | 👎 {{ post.dislikes_count_annotated }}</span>
+                                <span>❤️ {{ post.likes_count_annotated }} | 👎 {{ post.dislikes_count_annotated }} | 💬 {{ post.comments_count_annotated }}</span>
                             {% endif %}
-                            <a href="{% url 'post_comments' post.id %}" class="btn btn-sm d-flex align-items-center {% if post.comments_count_annotated > 0 %}btn-outline-primary{% else %}btn-primary{% endif %}">
-                                💬 <span class="ms-1">{{ post.comments_count_annotated }}</span>
-                            </a>
                         </div>
                     </div>
 
