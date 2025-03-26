@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'comments.apps.CommentsConfig',
     'posts.apps.PostsConfig',
     'reactions.apps.ReactionsConfig',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
