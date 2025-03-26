@@ -18,6 +18,7 @@
             <div class="input-group">
                 <input type="text" name="username" class="form-control" value="{{ form.username.value|default:'' }}" id="id_username">
             </div>
+            <div class="text-danger small">{{ form.username.errors }}</div>
         </div>
 
         <div class="mb-3">
@@ -25,6 +26,7 @@
             <div class="input-group">
                 <input type="email" name="email" class="form-control" value="{{ form.email.value|default:'' }}" id="id_email">
             </div>
+            <div class="text-danger small">{{ form.email.errors }}</div>
         </div>
 
         <div class="mb-3">
@@ -32,6 +34,7 @@
             <div class="input-group">
                 <input type="password" name="password1" class="form-control" id="id_password1">
             </div>
+            <div class="text-danger small">{{ form.password1.errors }}</div>
         </div>
 
         <div class="mb-3">
@@ -39,6 +42,7 @@
             <div class="input-group">
                 <input type="password" name="password2" class="form-control" id="id_password2">
             </div>
+            <div class="text-danger small">{{ form.password2.errors }}</div>
         </div>
 
         <div class="mb-3">
@@ -46,6 +50,7 @@
             <div class="input-group">
                 <input type="file" name="icon" class="form-control" id="id_icon">
             </div>
+            <div class="text-danger small">{{ form.icon.errors }}</div>
         </div>
 
         <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
