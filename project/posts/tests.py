@@ -36,8 +36,7 @@ class PostModelTest(TestCase):
     def test_likes_count_property(self):
         self.assertEqual(self.post.likes_count, 0)
 
-        # счетчик дизлайков
-
+    # счетчик дизлайков
     def test_dislikes_count_property(self):
         self.assertEqual(self.post.dislikes_count, 0)
 
